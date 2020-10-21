@@ -13,7 +13,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [1] = LAYOUT(
-    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS, 
+    DYN_REC_STOP, DYN_MACRO_PLAY1, DYN_MACRO_PLAY2,
+                                  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+                                                                                                                  DYN_REC_START1,  DYN_REC_START2,
+                                                                                                                                      KC_TRNS,  KC_TRNS,  KC_TRNS, 
     KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_VOLD,  KC_VOLU,  KC_TRNS,  RESET,    KC_TRNS, 
     KC_TRNS,  RGB_TOG,  RGB_MOD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_SAI,  KC_TRNS,  KC_TRNS,  RGB_HUD,  BL_DEC,   BL_INC,   KC_TRNS,            KC_TRNS, 
     KC_TRNS,  RGB_M_P,  RGB_M_B,  RGB_SAD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_VAD,  RGB_VAI,  KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  
