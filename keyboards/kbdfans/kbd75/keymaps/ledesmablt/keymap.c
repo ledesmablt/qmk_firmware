@@ -24,3 +24,107 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS 
   ),
 };
+
+
+// Based off adamdehaven's config
+extern rgblight_config_t rgblight_config;
+static bool RGB_user_wants_enabled;
+uint16_t RGB_current_mode;
+uint16_t RGB_current_hue;
+uint16_t RGB_current_sat;
+uint16_t RGB_current_val;
+
+// Setup RGB
+void keyboard_post_init_user(void) {
+    RGB_user_wants_enabled = rgblight_config.enable;
+    RGB_current_mode = rgblight_config.mode;
+    RGB_current_hue  = rgblight_config.hue;
+    RGB_current_sat  = rgblight_config.sat;
+    RGB_current_val  = rgblight_config.val;
+};
+
+// Restore user settings
+void restore_user_rgb_settings(void) {
+    // First, enable RGB
+    if (RGB_user_wants_enabled && !rgblight_config.enable) {
+        rgblight_enable();
+    } else if (!RGB_user_wants_enabled && rgblight_config.enable) {
+        rgblight_disable();
+    }
+
+    // Restore settings
+    rgblight_sethsv(RGB_current_hue, RGB_current_sat, RGB_current_val); // Restore underglow RGB color
+    rgblight_mode(RGB_current_mode); // Restore RGB mode
+};
+
+// Fire on keypress
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case RGB_M_P:
+            if (!record->event.pressed) {
+                RGB_user_wants_enabled = rgblight_config.enable;
+                RGB_current_mode = rgblight_config.mode;
+            }
+        case RGB_M_B:
+            if (!record->event.pressed) {
+                RGB_user_wants_enabled = rgblight_config.enable;
+                RGB_current_mode = rgblight_config.mode;
+            }
+        case RGB_TOG:
+            if (!record->event.pressed) {
+                // on keyup
+                RGB_user_wants_enabled = rgblight_config.enable;
+            }
+            break;
+        case RGB_MOD:
+            if (!record->event.pressed) {
+                // on keyup
+                RGB_current_mode = rgblight_config.mode;
+            }
+            break;
+        case RGB_HUI:
+        case RGB_HUD:
+            if (!record->event.pressed) {
+                // on keyup
+                RGB_current_hue = rgblight_config.hue;
+            }
+            break;
+        case RGB_SAI:
+        case RGB_SAD:
+            if (!record->event.pressed) {
+                // on keyup
+                RGB_current_sat = rgblight_config.sat;
+            }
+            break;
+        case RGB_VAI:
+        case RGB_VAD:
+            if (!record->event.pressed) {
+                // on keyup
+                RGB_current_val = rgblight_config.val;
+            }
+            break;
+    }
+    return true;
+};
+
+
+
+void toggle_rgb_caps_lock(bool isActive) {
+    if (isActive) {
+        if (!rgblight_config.enable) {
+            rgblight_enable();
+        }
+
+        // Set underglow color if CAPS_LOCK enabled
+        rgblight_sethsv(HSV_WHITE);
+        // Set to breathe
+        rgblight_mode(4);
+    } else {
+        restore_user_rgb_settings();
+    }
+};
+
+bool led_update_user(led_t led_state) {
+    toggle_rgb_caps_lock(led_state.caps_lock);
+    return true;
+};
