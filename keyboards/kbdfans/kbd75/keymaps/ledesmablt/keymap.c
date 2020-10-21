@@ -108,9 +108,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 };
 
 
-
-void toggle_rgb_caps_lock(bool isActive) {
-    if (isActive) {
+bool isRecording = false;
+bool led_update_user(led_t led_state) {
+    if (led_state.caps_lock) {
         if (!rgblight_config.enable) {
             rgblight_enable();
         }
@@ -119,12 +119,20 @@ void toggle_rgb_caps_lock(bool isActive) {
         rgblight_sethsv(HSV_WHITE);
         // Set to breathe
         rgblight_mode(4);
+    } else if (isRecording) {
+        rgblight_sethsv(HSV_SPRINGGREEN);
+        rgblight_mode(5);
     } else {
         restore_user_rgb_settings();
     }
-};
-
-bool led_update_user(led_t led_state) {
-    toggle_rgb_caps_lock(led_state.caps_lock);
     return true;
 };
+
+
+// dynamic macros
+void dynamic_macro_record_start_user(void) {
+    isRecording = true;
+}
+void dynamic_macro_record_end_user(int8_t direction) {
+    isRecording = false;
+}
