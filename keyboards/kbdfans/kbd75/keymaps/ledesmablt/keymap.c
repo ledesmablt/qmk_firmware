@@ -114,11 +114,8 @@ bool led_update_user(led_t led_state) {
         if (!rgblight_config.enable) {
             rgblight_enable();
         }
-
-        // Set underglow color if CAPS_LOCK enabled
-        rgblight_sethsv(HSV_WHITE);
-        // Set to breathe
-        rgblight_mode(4);
+        rgblight_sethsv(HSV_GOLDENROD);
+        rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
     } else if (isRecording) {
         rgblight_sethsv(HSV_SPRINGGREEN);
         rgblight_mode(5);
