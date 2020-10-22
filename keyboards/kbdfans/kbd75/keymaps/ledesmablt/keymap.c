@@ -3,7 +3,8 @@
 // layer constants
 #define _BASE 0
 #define _FN1 1
-#define _VIM 2
+#define _VIM 5
+#define _MOUS 6
 
 bool isRecording = false;
 
@@ -32,16 +33,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_VIM] = LAYOUT(
-    TO(_BASE),KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS, 
-    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS, 
-    KC_TRNS,  KC_TRNS,  LCTL(KC_RGHT),
-                                  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_PGUP,  TO(_BASE),KC_TRNS,  LSFT(KC_F3),
-                                                                                                                  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS, 
-    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_PGDN,  KC_TRNS,  KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  
-    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  LCTL(KC_LEFT),
-                                                                          KC_F3,    KC_TRNS,  KC_TRNS,  KC_TRNS,  LCTL(KC_F),
-                                                                                                                            KC_TRNS,            KC_TRNS,  KC_TRNS, 
-    KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS 
+    TO(_BASE),KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,   
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,   
+    KC_NO,    KC_NO,    LCTL(KC_RGHT),
+                                  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_PGUP,  TO(_BASE),KC_NO,    LSFT(KC_F3),
+                                                                                                                  KC_NO,    KC_NO,    KC_NO,              KC_NO,   
+    KC_NO,    KC_NO,    KC_NO,    KC_PGDN,  KC_NO,    KC_NO,    KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_NO,    KC_NO,                        KC_NO,    KC_NO,    
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_LEFT),
+                                                                          KC_F3,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_F),
+                                                                                                                            KC_NO,              KC_NO,    KC_NO,   
+    KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS 
   ),
 
   [3] = LAYOUT(
