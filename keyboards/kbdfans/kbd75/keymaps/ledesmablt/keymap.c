@@ -28,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,  TO(_BASE),TO(_FN1), KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_VOLD,  KC_VOLU,  KC_TRNS,  RESET,    KC_TRNS, 
     KC_TRNS,  RGB_TOG,  RGB_MOD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_SAI,  KC_TRNS,  KC_TRNS,  RGB_HUD,  BL_DEC,   BL_INC,   KC_TRNS,            KC_TRNS, 
     KC_TRNS,  RGB_M_P,  RGB_M_B,  RGB_SAD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_VAD,  RGB_VAI,  KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  
-    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  TO(_VIM), KC_TRNS,  RGB_HUI,  KC_TRNS,  KC_MPRV,  KC_MNXT,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS, 
+    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  TO(_VIM), KC_TRNS,  RGB_HUI,  TO(_MOUS),KC_MPRV,  KC_MNXT,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS, 
     KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS 
   ),
 
@@ -38,10 +38,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,    KC_NO,    LCTL(KC_RGHT),
                                   KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_PGUP,  TO(_BASE),KC_NO,    LSFT(KC_F3),
                                                                                                                   KC_NO,    KC_NO,    KC_NO,              KC_NO,   
-    KC_NO,    KC_NO,    KC_NO,    KC_PGDN,  KC_NO,    KC_NO,    KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_NO,    KC_NO,                        KC_NO,    KC_NO,    
+    KC_NO,    KC_NO,    KC_NO,    KC_PGDN,  KC_NO,    KC_NO,    KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_NO,    KC_NO,                        KC_ENT,   KC_NO,    
     KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_LEFT),
                                                                           KC_F3,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_F),
                                                                                                                             KC_NO,              KC_NO,    KC_NO,   
+    KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS 
+  ),
+
+  [_MOUS] = LAYOUT(
+    TO(_BASE),KC_MS_ACCEL0,KC_MS_ACCEL1,KC_MS_ACCEL2,
+                                            KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_MS_WH_UP,
+                                                                                    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_MS_BTN2,         KC_NO,   
+    KC_NO,    KC_NO,    KC_NO,    KC_MS_WH_DOWN,
+                                            KC_NO,    KC_NO,    
+                                                                KC_MS_LEFT,KC_MS_DOWN,KC_MS_UP,KC_MS_RIGHT,
+                                                                                                        KC_NO,    KC_NO,                        KC_MS_BTN1,
+                                                                                                                                                          KC_NO,    
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,              KC_NO,    KC_NO,   
     KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS 
   ),
 
@@ -65,6 +80,10 @@ uint16_t RGB_current_sat;
 uint16_t RGB_current_val;
 
 // customs
+void enable_mouse_light(void) {
+    rgblight_sethsv(HSV_ORANGE);
+}
+
 void enable_vim_light(void) {
     rgblight_sethsv(HSV_TEAL);
 }
@@ -160,6 +179,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 bool led_update_user(led_t led_state) {
     if (layer_state_is(_VIM)) {
         enable_vim_light();
+    } else if (layer_state_is(_MOUS)) {
+        enable_mouse_light();
     } else if (led_state.caps_lock) {
         enable_caps_light();
     } else if (isRecording) {
