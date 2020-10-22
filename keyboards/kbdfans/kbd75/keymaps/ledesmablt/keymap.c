@@ -5,6 +5,8 @@
 #define _FN1 1
 #define _VIM 2
 
+bool isRecording = false;
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QWERTY] = LAYOUT(
@@ -144,7 +146,6 @@ void enable_caps_light(void) {
     rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
 }
 
-bool isRecording = false;
 bool led_update_user(led_t led_state) {
     if (led_state.caps_lock) {
         enable_caps_light();
