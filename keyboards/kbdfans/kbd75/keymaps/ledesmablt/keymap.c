@@ -4,9 +4,10 @@
 #define _BASE 0
 #define _FN1 1
 #define _VIM 5
-#define _MOUS 6
+#define _VIM2 6
+#define _MOUS 8
 
-bool isRecording = false;
+bool is_recording  = false;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -32,15 +33,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS
   ),
 
+
   [_VIM] = LAYOUT(
     TO(_BASE),KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
-    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_END,   KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS,
+    KC_NO,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
     KC_TRNS,  TO(_BASE),KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_PGUP,  TO(_BASE),KC_NO,    LSFT(KC_F3),
                                                                                                                   KC_NO,    KC_NO,    KC_NO,              KC_TRNS,
     KC_TRNS,  KC_NO,    KC_NO,    KC_PGDN,  KC_WFWD,  KC_HOME,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_NO,    KC_NO,                        KC_ENT,   KC_TRNS,
-    KC_TRNS,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_WBAK,  KC_F3,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_F),
-                                                                                                                            KC_TRNS,            KC_TRNS,  KC_TRNS,
+    LT(_VIM2, KC_NO),
+              KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_WBAK,  KC_F3,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_F),
+                                                                                                                            LT(_VIM2, KC_TRNS), KC_TRNS,  KC_TRNS,
     KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS
+  ),
+  // shifted vim
+  [_VIM2] = LAYOUT(
+    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_END,   KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS,
+    LSFT(KC_TAB),
+              KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_F3,    KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,
+    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_END,   KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,
+    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  LSFT(KC_F3),
+                                                                                    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
+    KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS
   ),
 
   [_MOUS] = LAYOUT(
@@ -181,7 +195,7 @@ bool led_update_user(led_t led_state) {
         enable_mouse_light();
     } else if (led_state.caps_lock) {
         enable_caps_light();
-    } else if (isRecording) {
+    } else if (is_recording) {
         enable_macro_light();
     } else {
         restore_user_rgb_settings();
@@ -192,10 +206,10 @@ bool led_update_user(led_t led_state) {
 
 // dynamic macros
 void dynamic_macro_record_start_user(void) {
-    isRecording = true;
+    is_recording = true;
     enable_macro_light();
 }
 void dynamic_macro_record_end_user(int8_t direction) {
-    isRecording = false;
+    is_recording = false;
     restore_user_rgb_settings();
 }
