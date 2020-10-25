@@ -34,15 +34,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_VIM] = LAYOUT(
     TO(_BASE),KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
-    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_END,   KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,
-    KC_NO,    KC_NO,    LCTL(KC_RGHT),
-                                  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_PGUP,  TO(_BASE),KC_NO,    LSFT(KC_F3),
-                                                                                                                  KC_NO,    KC_NO,    KC_NO,              KC_NO,
-    KC_NO,    KC_NO,    KC_NO,    KC_PGDN,  KC_NO,    KC_HOME,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_NO,    KC_NO,                        KC_ENT,   KC_NO,
-    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_LEFT),
-                                                                          KC_F3,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_F),
-                                                                                                                            KC_NO,              KC_NO,    KC_NO,
-    KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS
+    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_END,   KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_HOME,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_TRNS,
+    KC_TRNS,  TO(_BASE),KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_PGUP,  TO(_BASE),KC_NO,    LSFT(KC_F3),
+                                                                                                                  KC_NO,    KC_NO,    KC_NO,              KC_TRNS,
+    KC_TRNS,  KC_NO,    KC_NO,    KC_PGDN,  KC_WFWD,  KC_HOME,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_NO,    KC_NO,                        KC_ENT,   KC_TRNS,
+    KC_TRNS,  KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_WBAK,  KC_F3,    KC_NO,    KC_NO,    KC_NO,    LCTL(KC_F),
+                                                                                                                            KC_TRNS,            KC_TRNS,  KC_TRNS,
+    KC_TRNS,  KC_TRNS,  KC_TRNS,                      KC_NO,    KC_NO,    KC_NO,                        KC_NO,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS
   ),
 
   [_MOUS] = LAYOUT(
