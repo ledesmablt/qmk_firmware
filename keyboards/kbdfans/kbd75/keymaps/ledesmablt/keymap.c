@@ -109,7 +109,8 @@ void enable_caps_light(void) {
     if (!rgblight_config.enable) {
         rgblight_enable();
     }
-    rgblight_sethsv(HSV_GOLD);
+    // gold = 36, 255, 255
+    rgblight_sethsv(36, 255, RGB_current_val);
     rgblight_mode(RGBLIGHT_MODE_STATIC_LIGHT);
 }
 
