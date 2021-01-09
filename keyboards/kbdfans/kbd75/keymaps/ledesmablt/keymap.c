@@ -10,6 +10,34 @@
 
 bool is_recording  = false;
 
+// tap dance
+typedef struct {
+    bool is_press_action;
+    uint8_t state;
+} tap;
+
+enum {
+    SINGLE_TAP = 1,
+    SINGLE_HOLD,
+    DOUBLE_TAP,
+    DOUBLE_HOLD,
+    DOUBLE_SINGLE_TAP, // Send two single taps
+    TRIPLE_TAP,
+    TRIPLE_HOLD
+};
+
+// Tap dance enums
+enum {
+    RALT_WIN
+};
+
+uint8_t cur_dance(qk_tap_dance_state_t *state);
+
+// For the x tap dance. Put it here so it can be used in any keymap
+void x_finished(qk_tap_dance_state_t *state, void *user_data);
+void x_reset(qk_tap_dance_state_t *state, void *user_data);
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_BASE] = LAYOUT(
@@ -19,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  LT(_VIM, KC_BSLS),  KC_PGUP,
     KC_CAPS,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,                      KC_ENT,   KC_PGDN,
     KC_LSFT,  MO(_FN1), KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,            KC_UP,    KC_END,
-    KC_LCTL,  KC_LGUI,  KC_LALT,                      KC_SPC,   KC_SPC,   KC_SPC,                       KC_RALT,  MO(_FN1), KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT
+    KC_LCTL,  KC_LGUI,  KC_LALT,                      KC_SPC,   KC_SPC,   KC_SPC,                       TD(RALT_WIN),  MO(_FN1), KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT
   ),
 
   // base but w/ CAPS mapped to ESC
@@ -225,3 +253,63 @@ void dynamic_macro_record_end_user(int8_t direction) {
     is_recording = false;
     restore_user_rgb_settings();
 }
+
+
+// tap dance prog
+uint8_t cur_dance(qk_tap_dance_state_t *state) {
+    if (state->count == 1) {
+        if (state->interrupted || !state->pressed) return SINGLE_TAP;
+        // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
+        else return SINGLE_HOLD;
+    } else if (state->count == 2) {
+        // DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+        // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+        // keystrokes of the key, and not the 'double tap' action/macro.
+        if (state->interrupted) return DOUBLE_SINGLE_TAP;
+        else if (state->pressed) return DOUBLE_HOLD;
+        else return DOUBLE_TAP;
+    }
+
+    // Assumes no one is trying to type the same letter three times (at least not quickly).
+    // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+    // an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
+    if (state->count == 3) {
+        if (state->interrupted || !state->pressed) return TRIPLE_TAP;
+        else return TRIPLE_HOLD;
+    } else return 8; // Magic number. At some point this method will expand to work for more presses
+}
+
+// Create an instance of 'tap' for the 'x' tap dance.
+static tap ralttap_state = {
+    .is_press_action = true,
+    .state = 0
+};
+
+void x_finished(qk_tap_dance_state_t *state, void *user_data) {
+    ralttap_state.state = cur_dance(state);
+    switch (ralttap_state.state) {
+        case SINGLE_TAP: register_code(KC_RALT); break;
+        case SINGLE_HOLD: register_code(KC_RALT); break;
+        case DOUBLE_TAP: register_code(KC_LGUI); break;
+        case DOUBLE_HOLD: register_code(KC_LGUI); break;
+        // Last case is for fast typing. Assuming your key is `f`:
+        // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+        // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+        case DOUBLE_SINGLE_TAP: tap_code(KC_LGUI); register_code(KC_LGUI);
+    }
+}
+
+void x_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (ralttap_state.state) {
+        case SINGLE_TAP: unregister_code(KC_RALT); break;
+        case SINGLE_HOLD: unregister_code(KC_RALT); break;
+        case DOUBLE_TAP: unregister_code(KC_LGUI); break;
+        case DOUBLE_HOLD: unregister_code(KC_LGUI);
+        case DOUBLE_SINGLE_TAP: unregister_code(KC_LGUI);
+    }
+    ralttap_state.state = 0;
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [RALT_WIN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, x_finished, x_reset)
+};
