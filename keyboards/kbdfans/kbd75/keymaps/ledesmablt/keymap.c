@@ -265,8 +265,8 @@ uint8_t cur_dance(qk_tap_dance_state_t *state) {
         // DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
         // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
         // keystrokes of the key, and not the 'double tap' action/macro.
-        if (state->interrupted) return DOUBLE_SINGLE_TAP;
-        else if (state->pressed) return DOUBLE_HOLD;
+        // if (state->interrupted) return DOUBLE_SINGLE_TAP;
+        if (state->pressed) return DOUBLE_HOLD;
         else return DOUBLE_TAP;
     }
 
@@ -295,7 +295,7 @@ void x_finished(qk_tap_dance_state_t *state, void *user_data) {
         // Last case is for fast typing. Assuming your key is `f`:
         // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
         // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
-        case DOUBLE_SINGLE_TAP: tap_code(KC_LGUI); register_code(KC_LGUI);
+        // case DOUBLE_SINGLE_TAP: tap_code(KC_LGUI); register_code(KC_LGUI);
     }
 }
 
@@ -305,7 +305,7 @@ void x_reset(qk_tap_dance_state_t *state, void *user_data) {
         case SINGLE_HOLD: unregister_code(KC_RALT); break;
         case DOUBLE_TAP: unregister_code(KC_LGUI); break;
         case DOUBLE_HOLD: unregister_code(KC_LGUI);
-        case DOUBLE_SINGLE_TAP: unregister_code(KC_LGUI);
+        // case DOUBLE_SINGLE_TAP: unregister_code(KC_LGUI);
     }
     ralttap_state.state = 0;
 }
